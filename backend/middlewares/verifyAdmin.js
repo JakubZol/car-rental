@@ -11,13 +11,18 @@ const verifyAdmin = (req, res, next) => {
             if (error) {
                 res.status(401).json({ error: RESPONSE_MESSAGES.AUTHENTICATION_FAILED });
             } else {
-                const { isAdmin } = await User.findOne({ _id: decodedToken.id });
+                try {
+                    const user = await User.findOne({_id: decodedToken.id});
 
-                if (isAdmin){
-                    next();
+                    if (user.isAdmin) {
+                        next();
+                    }
+                    else {
+                        res.status(403).json({error: RESPONSE_MESSAGES.ACCESS_DENIED});
+                    }
                 }
-                else {
-                    res.status(403).json({ error: RESPONSE_MESSAGES.ACCESS_DENIED });
+                catch(eror) {
+                    res.status(501).json(error);
                 }
             }
         });

@@ -1,4 +1,5 @@
 const Car = require('../models/Car');
+const Reservation = require('../models/Reservation');
 const { RESPONSE_MESSAGES } = require('../consts');
 
 module.exports.getAllCars = async (req, res) => {
@@ -25,7 +26,8 @@ module.exports.addCar = async (req, res) => {
 
 module.exports.deleteCar = async (req, res) => {
     try {
-        await Car.deleteOne({ _id: req.body._id });
+        await Car.deleteOne({ _id: req.body.carId });
+        await Reservation.deleteMany({ car_id: req.body.carId });
         res.status(204).json({ message: RESPONSE_MESSAGES.RESOURCE_DELETED });
     }
     catch(error) {
@@ -50,4 +52,8 @@ module.exports.modifyCar = async (req, res) => {
     catch(error) {
         res.status(400).json(error);
     }
+};
+
+module.exports.checkCarAvailability = async (req, res) => {
+    res.status(200).json({ available: res.locals.carAvailable });
 };

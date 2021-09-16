@@ -31,16 +31,21 @@ module.exports.getReservations = async (req, res) => {
 };
 
 module.exports.createReservation = async (req, res) => {
-    const { from, to, car_id } = req.body;
+    if (res.locals.carAvailable) {
+        const {from, to, carId} = req.body;
 
-    try {
-        const { _doc } = await Reservation.create({ from, to, car_id, user_id: res.locals.userId });
-        const reservation = await getReservationData(_doc, true);
+        try {
+            const {_doc} = await Reservation.create({from, to, car_id: carId, user_id: res.locals.userId});
+            const reservation = await getReservationData(_doc, true);
 
-        res.status(201).json(reservation);
+            res.status(201).json(reservation);
+        }
+        catch (error) {
+            res.status(400).json(error);
+        }
     }
-    catch(error) {
-        res.status(400).json(error);
+    else {
+        res.status().json({ message: 'Car is not available' }); // TODO: co tu zwrócić?
     }
 };
 

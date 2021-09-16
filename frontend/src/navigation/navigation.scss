@@ -1,0 +1,40 @@
+.navigation {
+  width: 100%;
+  margin: 0;
+  height: 3rem;
+  background-color: darkgreen;
+  display: flex;
+  align-items: center;
+
+  &__link {
+    margin: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.2rem;
+    text-decoration: none;
+    color: white;
+
+    &.active,
+    &:hover {
+      background-color: green;
+      cursor: pointer;
+      color: darkgray;
+    }
+  }
+
+  &__additional-buttons {
+    margin-left: auto;
+  }
+
+  &__user-panel {
+    display: flex;
+    align-items: center;
+    color: white;
+  }
+
+  &__logout {
+    border-right: 1px solid white;
+    border-radius: 0;
+    background-color: transparent;
+    margin-left: 1rem;
+  }
+}
