@@ -7,20 +7,21 @@ module.exports.getAllCars = async (req, res) => {
         const cars = await Car.find();
         res.status(200).json(cars);
     }
-    catch(error) {
-        res.status(400).json(error);
+    catch {
+        res.status(400).json({ error: RESPONSE_MESSAGES.BAD_REQUEST });
     }
 };
 
-module.exports.addCar = async (req, res) => {
+module.exports.createCar = async (req, res) => {
     const { brand, model, price, quantity } = req.body;
 
     try {
         const { _doc } = await Car.create({brand, model, price, quantity: quantity || 1});
         res.status(201).json(_doc);
     }
-    catch(error){
-        res.status(400).json(error);
+    catch({ errors }){
+        const errorMessages = Object.values(errors).map(({ message }) => message);
+        res.status(400).json({ error: errorMessages });
     }
 };
 
@@ -30,12 +31,12 @@ module.exports.deleteCar = async (req, res) => {
         await Reservation.deleteMany({ car_id: req.body.carId });
         res.status(204).json({ message: RESPONSE_MESSAGES.RESOURCE_DELETED });
     }
-    catch(error) {
-        res.status(400).json(error);
+    catch {
+        res.status(400).json({ error: RESPONSE_MESSAGES.BAD_REQUEST });
     }
 };
 
-module.exports.modifyCar = async (req, res) => {
+module.exports.updateCar = async (req, res) => {
     const { _id, ...carData } = req.body;
 
     try {
@@ -49,8 +50,8 @@ module.exports.modifyCar = async (req, res) => {
 
         res.status(200).json(car);
     }
-    catch(error) {
-        res.status(400).json(error);
+    catch {
+        res.status(400).json({ error: RESPONSE_MESSAGES.BAD_REQUEST });
     }
 };
 

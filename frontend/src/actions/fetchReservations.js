@@ -1,6 +1,7 @@
 import { FETCH_RESERVATIONS_INIT, FETCH_RESERVATIONS_SUCCESS, FETCH_RESERVATIONS_FAILURE } from "./types";
 
 import axios from "axios";
+import {DEFAULT_REQUEST_HEADERS, RESERVATIONS_API_URL} from "../consts";
 
 const fetchReservationsInit = () => ({
     type: FETCH_RESERVATIONS_INIT
@@ -11,7 +12,7 @@ const fetchReservationsSuccess =  reservations => ({
     payload: reservations,
 });
 
-const fetchReservationsFailure = error => ({
+const fetchReservationsFailure = ({ error }) => ({
     type: FETCH_RESERVATIONS_FAILURE,
     payload: error,
 });
@@ -20,16 +21,13 @@ export default () => dispatch => {
     dispatch(fetchReservationsInit());
 
     axios({
-        url: 'http://localhost:2400/reservations',
+        url: RESERVATIONS_API_URL,
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
+        headers: DEFAULT_REQUEST_HEADERS,
         withCredentials: true,
     }).then(({ data }) => {
         dispatch(fetchReservationsSuccess(data));
     }).catch(error => {
-        dispatch(fetchReservationsFailure(error));
+        dispatch(fetchReservationsFailure(error.response.data));
     })
 };

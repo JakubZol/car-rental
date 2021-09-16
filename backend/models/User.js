@@ -45,7 +45,7 @@ userModel.statics.login = async function(email, password) {
         }
         throw Error(VALIDATION_MESSAGES.USER.WRONG_PASSWORD);
     }
-    throw Error(VALIDATION_MESSAGES.USER.WRONG_EMAIL);
+    throw Error(VALIDATION_MESSAGES.USER.NO_USER);
 };
 
 

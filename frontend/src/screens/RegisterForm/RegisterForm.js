@@ -1,6 +1,7 @@
 import React from 'react';
-import '../../styles/basic-form.scss'
+import Error from "../../error/Error";
 
+import '../../styles/basic-form.scss'
 
 const RegisterForm = ({ registerForm, updateRegisterForm, register }) => {
 
@@ -10,6 +11,7 @@ const RegisterForm = ({ registerForm, updateRegisterForm, register }) => {
 
     return (
         <div className="basic-form register-form">
+            {registerForm.error && <Error error={registerForm.error}/>}
             <h2> Rejestracja </h2>
             <input placeholder="Imię" type="text" onChange={({ target }) => onChange('name', target.value)}/>
             <input placeholder="Nazwisko" type="text" onChange={({ target }) => onChange('surname', target.value)}/>

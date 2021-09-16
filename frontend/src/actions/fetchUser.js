@@ -1,4 +1,5 @@
 import { FETCH_USER_INIT, FETCH_USER_SUCCESS, FETCH_USER_FAILURE } from "./types";
+import { API_URL, DEFAULT_REQUEST_HEADERS } from "../consts";
 
 import axios from "axios";
 
@@ -11,7 +12,7 @@ const fetchUserSuccess =  user => ({
     payload: user,
 });
 
-const fetchUserFailure = error => ({
+const fetchUserFailure = ({ error }) => ({
     type: FETCH_USER_FAILURE,
     payload: error,
 });
@@ -20,16 +21,13 @@ export default () => dispatch => {
     dispatch(fetchUserInit());
 
     axios({
-        url: 'http://localhost:2400/user',
+        url: `${API_URL}/user`,
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
+        headers: DEFAULT_REQUEST_HEADERS,
         withCredentials: true,
     }).then(({ data }) => {
         dispatch(fetchUserSuccess(data));
     }).catch(error => {
-        dispatch(fetchUserFailure(error));
+        dispatch(fetchUserFailure(error.response.data));
     })
 };

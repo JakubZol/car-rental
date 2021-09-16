@@ -18,11 +18,11 @@ const verifyAdmin = (req, res, next) => {
                         next();
                     }
                     else {
-                        res.status(403).json({error: RESPONSE_MESSAGES.ACCESS_DENIED});
+                        res.status(403).json({ error: RESPONSE_MESSAGES.ACCESS_DENIED });
                     }
                 }
-                catch(eror) {
-                    res.status(501).json(error);
+                catch(error) {
+                    res.status(400).json({ error: RESPONSE_MESSAGES.BAD_REQUEST });
                 }
             }
         });

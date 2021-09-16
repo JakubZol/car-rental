@@ -10,7 +10,14 @@ import {
     CLEAR_NEW_CAR_FORM,
     UPDATE_UPDATE_CAR_FORM,
     CLEAR_UPDATE_CAR_FORM,
-    UPDATE_UPDATE_RESERVATION_FORM, CLEAR_UPDATE_RESERVATION_FORM
+    UPDATE_UPDATE_RESERVATION_FORM,
+    CLEAR_UPDATE_RESERVATION_FORM,
+    LOGIN_FAILURE,
+    REGISTER_FAILURE,
+    CREATE_RESERVATION_FAILURE,
+    ADD_CAR_FAILURE,
+    UPDATE_CAR_FAILURE,
+    UPDATE_RESERVATION_FAILURE
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -34,6 +41,11 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 login: INITIAL_STATE.login,
             };
+        case LOGIN_FAILURE:
+            return {
+                ...state,
+                login: { ...state.login, error: action.payload },
+            };
         case UPDATE_REGISTER_FORM:
             return {
                 ...state,
@@ -43,6 +55,11 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 register: INITIAL_STATE.register,
+            };
+        case REGISTER_FAILURE:
+            return {
+                ...state,
+                register: { ...state.register, error: action.payload },
             };
         case UPDATE_RESERVATION_FORM:
             return {
@@ -55,6 +72,11 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 reservation: INITIAL_STATE.reservation,
+            };
+        case CREATE_RESERVATION_FAILURE:
+            return {
+                ...state,
+                reservation: state.reservation.map(reservation => reservation.carId === action.carId ? { ...reservation, error: action.payload } : reservation),
             };
         case CHECK_AVAILABILITY_SUCCESS:
             return {
@@ -71,6 +93,11 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 car: INITIAL_STATE.car,
             };
+        case ADD_CAR_FAILURE:
+            return {
+                ...state,
+                car: { ...state.car, error: action.payload },
+            };
         case UPDATE_UPDATE_CAR_FORM:
             return {
                 ...state,
@@ -81,6 +108,11 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 updateCar: INITIAL_STATE.updateCar,
             };
+        case UPDATE_CAR_FAILURE:
+            return {
+                ...state,
+                updateCar: { ...state.updateCar, error: action.payload }
+            };
         case UPDATE_UPDATE_RESERVATION_FORM:
             return {
                 ...state,
@@ -90,6 +122,11 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 updateReservation: INITIAL_STATE.updateReservation,
+            };
+        case UPDATE_RESERVATION_FAILURE:
+            return {
+                ...state,
+                updateReservation: { ...state.updateReservation, error: action.payload }
             };
         default:
             return state;
