@@ -36,4 +36,4 @@ module.exports.VALIDATION_MESSAGES = {
 
 module.exports.DATABASE_URI = "mongodb://localhost/car-rental-db";
 module.exports.PORT_NUMBER = 2400;
-module.exports.CORS_ORIGIN = ''; //TODO: SET
+module.exports.CORS_ORIGIN = "http://localhost:3000";

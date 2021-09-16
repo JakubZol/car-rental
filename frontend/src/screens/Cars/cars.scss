@@ -1,0 +1,47 @@
+.cars {
+  padding: 1rem;
+
+  h3 {
+    margin: 0.5rem 0;
+  }
+
+  &__cars-list {
+    display: flex;
+  }
+
+  &__car-tab {
+    padding: 1rem;
+    border: 1px dashed gray;
+    margin: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+
+    input {
+      margin: 0 0.5rem;
+    }
+
+
+    .available {
+      color: darkgreen;
+      font-weight: bold;
+    }
+
+    .inavailable {
+      color: maroon;
+      font-weight: bold;
+    }
+  }
+
+  &__update-car-form {
+    border-top: 1px dashed gray;
+    border-bottom: 1px dashed gray;
+    padding: 0.5rem;
+    width: 100%;
+
+    button:last-child {
+      margin: 0;
+    }
+  }
+}

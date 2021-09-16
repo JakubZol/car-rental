@@ -1,0 +1,21 @@
+.reservations {
+  display: flex;
+  padding: 1rem;
+
+  &__reservation-tab {
+    padding: 1rem;
+    border: 1px dashed gray;
+    margin: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__update-reservation-form {
+
+    button {
+      margin: 0;
+    }
+  }
+}

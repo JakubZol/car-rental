@@ -11,7 +11,9 @@ module.exports.register = async (req, res) => {
     try {
         const { _doc: { password: _, ...user } } = await User.create({ email, password, name, surname, isAdmin });
         const token = generateToken(user._id);
-        res.cookie('authToken', token, { httpOnly: true, maxAge: MAX_TOKEN_AGE_MILLISECONDS });
+        res.cookie('authToken', token, { httpOnly: true, maxAge: MAX_TOKEN_AGE_MILLISECONDS, secure: true, sameSite: 'None' });
+        res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+        res.setHeader('Access-Control-Allow-Credentials', true);
         res.status(201).json(user);
     }
     catch(error) {
@@ -25,15 +27,30 @@ module.exports.login = async (req, res) => {
     try {
         const { _doc: { password: _, ...user } } = await User.login(email, password);
         const token = generateToken(user._id);
-        res.cookie('authToken', token, { httpOnly: true, maxAge: MAX_TOKEN_AGE_MILLISECONDS });
+        res.cookie('authToken', token, { httpOnly: true, maxAge: MAX_TOKEN_AGE_MILLISECONDS, secure:true, sameSite: 'None' });
+        res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+        res.setHeader('Access-Control-Allow-Credentials', true);
         res.status(200).json(user);
     }
     catch(error) {
+        console.log(error);
         res.status(400).json(error);
     }
 };
 
 module.exports.logout = (req, res) => {
-    res.cookie('authToken', '', { maxAge: 1 });
+    res.cookie('authToken', '', { maxAge: 1, secure:true, sameSite: 'None' });
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+    res.setHeader('Access-Control-Allow-Credentials', true);
     res.status(200).json({});
+};
+
+module.exports.getUser = async (req, res) => {
+    try {
+        const { _doc: { password, ...user } } = await User.findOne({ _id: res.locals.userId });
+        res.status(200).json(user);
+    }
+    catch(error) {
+        res.status(400).json(error);
+    }
 };
