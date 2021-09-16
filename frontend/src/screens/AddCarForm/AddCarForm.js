@@ -1,9 +1,11 @@
 import React from 'react';
 
 import '../../styles/basic-form.scss'
+import Error from "../../error/Error";
 
 const AddCarForm = ({ addCar, updateNewCarForm, carForm }) => (
     <div className="add-car-form basic-form">
+        {carForm.error && <Error error={carForm.error}/>}
         <h2>Dodaj nowe auto</h2>
         <input type="text" placeholder="Marka" onChange={({ target }) => updateNewCarForm({ brand: target.value })} />
         <input type="text" placeholder="Model" onChange={({ target }) => updateNewCarForm({ model: target.value })} />

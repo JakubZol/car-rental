@@ -25,8 +25,8 @@ module.exports.getReservations = async (req, res) => {
 
         res.status(200).json(await Promise.all(reservations.map(async reservation => await getReservationData(reservation._doc, isAdmin))));
     }
-    catch(error) {
-        res.status(400).json(error);
+    catch {
+        res.status(400).json({ error: RESPONSE_MESSAGES.BAD_REQUEST });
     }
 };
 
@@ -40,12 +40,13 @@ module.exports.createReservation = async (req, res) => {
 
             res.status(201).json(reservation);
         }
-        catch (error) {
-            res.status(400).json(error);
+        catch({ errors }){
+            const errorMessages = Object.values(errors).map(({ message }) => message);
+            res.status(400).json({ error: errorMessages });
         }
     }
     else {
-        res.status().json({ message: 'Car is not available' }); // TODO: co tu zwrócić?
+        res.status(204).json({ message: RESPONSE_MESSAGES.CAR_NOT_AVAILABLE });
     }
 };
 
@@ -70,7 +71,7 @@ module.exports.modifyReservation = async (req, res) => {
             res.status(403).json({ error: RESPONSE_MESSAGES.ACCESS_DENIED });
         }
     }
-    catch(error){
-        res.status(400).json(error);
+    catch {
+        res.status(400).json({ error: RESPONSE_MESSAGES.BAD_REQUEST });
     }
 };

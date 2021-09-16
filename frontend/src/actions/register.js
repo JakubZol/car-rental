@@ -5,6 +5,7 @@ import {
     REGISTER_SUCCESS,
     REGISTER_FAILURE,
 } from "./types";
+import {API_URL, DEFAULT_REQUEST_HEADERS} from "../consts";
 import axios from "axios";
 
 export const updateRegisterForm = registerForm => ({
@@ -21,7 +22,7 @@ const registerSuccess =  user => ({
     payload: user,
 });
 
-const registerFailure = error => ({
+const registerFailure = ({ error }) => ({
     type: REGISTER_FAILURE,
     payload: error,
 });
@@ -34,18 +35,15 @@ export default registerCredentials => dispatch => {
     dispatch(registerInit());
 
     axios({
-        url: 'http://localhost:2400/register',
+        url: `${API_URL}/register`,
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
+        headers: DEFAULT_REQUEST_HEADERS,
         data: JSON.stringify(registerCredentials),
         withCredentials: true,
     }).then(({ data }) => {
         dispatch(registerSuccess(data));
         dispatch(cleanRegisterForm());
     }).catch(error => {
-        dispatch(registerFailure(error));
+        dispatch(registerFailure(error.response.data));
     })
 };

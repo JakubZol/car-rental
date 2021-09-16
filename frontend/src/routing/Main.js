@@ -6,6 +6,8 @@ import RegisterForm from '../screens/RegisterForm';
 import Reservations from '../screens/Reservations';
 import Cars from '../screens/Cars';
 import AddCarForm from "../screens/AddCarForm";
+import NoContent from "../screens/NoContent";
+import { PATHS } from "../consts";
 
 
 const Main = ({ user, fetchUser }) => {
@@ -19,13 +21,14 @@ const Main = ({ user, fetchUser }) => {
 
     return (
         <Switch>
-                <Redirect exact from='/' to='/login'/>
-                <ProtectedRoute path="/login" component={LoginForm} isAuthenticated={isAuthenticated} authenticationRequired={false}/>
-                <ProtectedRoute path="/register" component={RegisterForm} isAuthenticated={isAuthenticated} authenticationRequired={false}/>
-                <ProtectedRoute path="/reservations" component={Reservations} componentProps={{ user }} isAuthenticated={isAuthenticated} authenticationRequired />
-                <ProtectedRoute path="/cars" component={Cars} componentProps={{ user }} isAuthenticated={isAuthenticated} authenticationRequired />
-                {isAdmin && <ProtectedRoute path="/add-car-form" component={AddCarForm} isAuthenticated={isAuthenticated} authenticationRequired />}
-                <Route component={() => <div>no content</div>}/>
+                <Redirect exact from={PATHS.DEFAULT} to={PATHS.LOGIN}/>
+                <ProtectedRoute path={PATHS.LOGIN} component={LoginForm} isAuthenticated={isAuthenticated} authenticationRequired={false}/>
+                <ProtectedRoute path={PATHS.REGISTER} component={RegisterForm} isAuthenticated={isAuthenticated} authenticationRequired={false}/>
+                <ProtectedRoute path={PATHS.RESERVATIONS} component={Reservations} componentProps={{ user }} isAuthenticated={isAuthenticated} authenticationRequired />
+                <ProtectedRoute path={PATHS.CARS} component={Cars} componentProps={{ user }} isAuthenticated={isAuthenticated} authenticationRequired />
+                {isAdmin && <ProtectedRoute path={PATHS.ADD_CAR} component={AddCarForm} isAuthenticated={isAuthenticated} authenticationRequired />}
+                {!isAdmin && <Redirect from={PATHS.ADD_CAR} to={PATHS.LOGIN}/>}
+                <Route component={NoContent}/>
         </Switch>
     )
 };

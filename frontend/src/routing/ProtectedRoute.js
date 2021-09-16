@@ -1,5 +1,6 @@
 import React from 'react'
 import { Redirect, Route } from 'react-router-dom';
+import { PATHS } from "../consts";
 
 const ProtectedRoute = ({ isAuthenticated, path, authenticationRequired, componentProps, component: Component }) => {
 
@@ -8,7 +9,7 @@ const ProtectedRoute = ({ isAuthenticated, path, authenticationRequired, compone
             <Component {...{...props, ...componentProps}} />
         ) : (
             <Redirect to={{
-                pathname: authenticationRequired ? '/login' : '/reservations',
+                pathname: authenticationRequired ? PATHS.LOGIN : PATHS.RESERVATIONS,
                 state: props.location,
             }}/>
         )

@@ -1,4 +1,6 @@
 import React from 'react';
+import Error from '../../error/Error'
+
 import '../../styles/basic-form.scss';
 
 const LoginForm = ({ loginForm, updateLoginForm, login }) => {
@@ -7,9 +9,9 @@ const LoginForm = ({ loginForm, updateLoginForm, login }) => {
 
     const onSubmit = () => login(loginForm);
 
-
     return (
         <div className="login-form basic-form">
+            {loginForm.error && <Error error={loginForm.error} />}
             <h2>Logowanie</h2>
             <input type="email" placeholder="Email" value={loginForm.email} onChange={({ target }) => onChange('email', target.value)} />
             <input type="password" placeholder="Hasło" value={loginForm.password} onChange={({ target }) => onChange('password', target.value)} />

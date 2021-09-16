@@ -5,6 +5,7 @@ import {
     UPDATE_UPDATE_CAR_FORM,
     CLEAR_UPDATE_CAR_FORM
 } from "./types";
+import { CARS_API_URL, DEFAULT_REQUEST_HEADERS } from "../consts";
 import axios from "axios";
 
 export const updateUpdateCarForm = reservationForm => ({
@@ -26,7 +27,7 @@ const updateCarSuccess =  car => ({
     payload: car,
 });
 
-const updateCarFailure = error => ({
+const updateCarFailure = ({ error }) => ({
     type: UPDATE_CAR_FAILURE,
     payload: error,
 });
@@ -35,18 +36,15 @@ export default carData => dispatch => {
     dispatch(updateCarInit());
 
     axios({
-        url: 'http://localhost:2400/cars',
+        url: CARS_API_URL,
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
+        headers: DEFAULT_REQUEST_HEADERS,
         withCredentials: true,
         data: JSON.stringify(carData),
     }).then(({ data }) => {
         dispatch(updateCarSuccess(data));
         dispatch(clearUpdateCarForm());
     }).catch(error => {
-        dispatch(updateCarFailure(error));
+        dispatch(updateCarFailure(error.response.data));
     })
 };

@@ -1,4 +1,5 @@
 import { UPDATE_LOGIN_FORM, CLEAR_LOGIN_FORM, LOGIN_INIT, LOGIN_SUCCESS, LOGIN_FAILURE } from "./types";
+import {API_URL, DEFAULT_REQUEST_HEADERS} from "../consts";
 import axios from 'axios';
 
 export const updateLoginForm = loginForm => ({
@@ -15,7 +16,7 @@ const loginSuccess =  user => ({
     payload: user,
 });
 
-const loginFailure = error => ({
+const loginFailure = ({ error }) => ({
     type: LOGIN_FAILURE,
     payload: error,
 });
@@ -28,18 +29,15 @@ export default loginCredentials => dispatch => {
     dispatch(loginInit());
 
     axios({
-        url: 'http://localhost:2400/login',
+        url: `${API_URL}/login`,
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
+        headers: DEFAULT_REQUEST_HEADERS,
         data: JSON.stringify(loginCredentials),
         withCredentials: true,
     }).then(({ data }) => {
         dispatch(loginSuccess(data));
         dispatch(cleanLoginForm());
     }).catch(error => {
-        dispatch(loginFailure(error));
+        dispatch(loginFailure(error.response.data));
     })
 };

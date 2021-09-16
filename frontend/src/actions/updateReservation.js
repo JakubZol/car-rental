@@ -5,6 +5,8 @@ import {
     UPDATE_UPDATE_RESERVATION_FORM, CLEAR_UPDATE_RESERVATION_FORM
 } from "./types";
 import axios from "axios";
+import { DEFAULT_REQUEST_HEADERS, RESERVATIONS_API_URL } from "../consts";
+
 
 export const updateUpdateReservationForm = reservationForm => ({
     type: UPDATE_UPDATE_RESERVATION_FORM,
@@ -24,7 +26,7 @@ const updateReservationSuccess =  reservation => ({
     payload: reservation,
 });
 
-const updateReservationFailure = error => ({
+const updateReservationFailure = ({ error }) => ({
     type: UPDATE_RESERVATION_FAILURE,
     payload: error,
 });
@@ -33,18 +35,15 @@ export default reservationData => dispatch => {
     dispatch(updateReservationInit());
 
     axios({
-        url: 'http://localhost:2400/reservations',
+        url: RESERVATIONS_API_URL,
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
+        headers: DEFAULT_REQUEST_HEADERS,
         withCredentials: true,
         data: JSON.stringify(reservationData),
     }).then(({ data }) => {
         dispatch(updateReservationSuccess(data));
         dispatch(clearUpdateReservationForm());
     }).catch(error => {
-        dispatch(updateReservationFailure(error));
+        dispatch(updateReservationFailure(error.response.data));
     })
 };

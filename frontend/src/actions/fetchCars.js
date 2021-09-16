@@ -1,5 +1,5 @@
 import { FETCH_CARS_INIT, FETCH_CARS_SUCCESS, FETCH_CARS_FAILURE } from "./types";
-
+import { CARS_API_URL, DEFAULT_REQUEST_HEADERS } from "../consts";
 import axios from "axios";
 
 const fetchCarsInit = () => ({
@@ -11,7 +11,7 @@ const fetchCarsSuccess =  cars => ({
     payload: cars,
 });
 
-const fetchCarsFailure = error => ({
+const fetchCarsFailure = ({ error }) => ({
     type: FETCH_CARS_FAILURE,
     payload: error,
 });
@@ -20,16 +20,13 @@ export default () => dispatch => {
     dispatch(fetchCarsInit());
 
     axios({
-        url: 'http://localhost:2400/cars',
+        url: CARS_API_URL,
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
+        headers: DEFAULT_REQUEST_HEADERS,
         withCredentials: true,
     }).then(({ data }) => {
         dispatch(fetchCarsSuccess(data));
     }).catch(error => {
-        dispatch(fetchCarsFailure(error));
+        dispatch(fetchCarsFailure(error.response.data));
     })
 };

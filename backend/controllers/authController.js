@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const { MAX_TOKEN_AGE, MAX_TOKEN_AGE_MILLISECONDS, TOKEN_SECRET } = require('../consts');
+const { MAX_TOKEN_AGE, MAX_TOKEN_AGE_MILLISECONDS, TOKEN_SECRET, RESPONSE_MESSAGES } = require('../consts');
 
 
 const generateToken = id => jwt.sign({ id }, TOKEN_SECRET, { expiresIn: MAX_TOKEN_AGE });
@@ -16,8 +16,9 @@ module.exports.register = async (req, res) => {
         res.setHeader('Access-Control-Allow-Credentials', true);
         res.status(201).json(user);
     }
-    catch(error) {
-        res.status(400).json(error);
+    catch({ errors }) {
+        const errorMessages = Object.values(errors).map(({ message }) => message);
+        res.status(400).json({ error: errorMessages });
     }
 };
 
@@ -33,8 +34,7 @@ module.exports.login = async (req, res) => {
         res.status(200).json(user);
     }
     catch(error) {
-        console.log(error);
-        res.status(400).json(error);
+        res.status(400).json({ error: error.message });
     }
 };
 
@@ -42,7 +42,7 @@ module.exports.logout = (req, res) => {
     res.cookie('authToken', '', { maxAge: 1, secure:true, sameSite: 'None' });
     res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
     res.setHeader('Access-Control-Allow-Credentials', true);
-    res.status(200).json({});
+    res.status(200).json();
 };
 
 module.exports.getUser = async (req, res) => {
@@ -50,7 +50,7 @@ module.exports.getUser = async (req, res) => {
         const { _doc: { password, ...user } } = await User.findOne({ _id: res.locals.userId });
         res.status(200).json(user);
     }
-    catch(error) {
-        res.status(400).json(error);
+    catch {
+        res.status(400).json({ error: RESPONSE_MESSAGES.BAD_REQUEST });
     }
 };
